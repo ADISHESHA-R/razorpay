@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home</title>
+    <style>
+        * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+  }
+
+  body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+  }
+
+  .navbar {
+      background-color: #1e1e2f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+  }
+
+  .navbar-left img {
+      height: 40px;
+  }
+
+  .search-box {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: none;
+      font-size: 14px;
+  }
+
+  .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  }
+
+  .cart-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+  }
+
+  .cart-btn img {
+      width: 28px;
+      height: 28px;
+      filter: brightness(0) invert(1);
+  }
+
+  .profile-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+  }
+
+  .profile-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+
+  .logout-btn {
+      background: linear-gradient(135deg, #ff4e50, #f44336);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+  }
+
+  .logout-btn:hover {
+      transform: scale(1.05);
+  }
+
+  .container {
+      padding: 30px;
+  }
+
+  h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      text-align: center;
+      color: #222;
+  }
+
+  .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+  }
+
+  .product-item {
+      width: 250px;
+      text-align: center;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: transform 0.2s ease-in-out;
+  }
+
+  .product-item:hover {
+      transform: translateY(-5px);
+  }
+
+  .product-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 10px;
+  }
+
+  .product-item h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: #333;
+  }
+
+  .product-item b {
+      display: block;
+      margin: 8px 0;
+      color: #e67e22;
+      font-size: 16px;
+  }
+
+  .description-box {
+      font-size: 14px;
+      color: #666;
+      max-height: 50px;
+      overflow: auto;
+      margin: 8px 0;
+      padding: 6px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+  }
+
+  .quantity-selector {
+      margin: 12px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+  }
+
+  .quantity-selector input {
+      width: 45px;
+      text-align: center;
+      padding: 4px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+  }
+
+  .quantity-selector button {
+      background: #ddd;
+      border: none;
+      padding: 6px 10px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+  }
+
+  .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+  }
+
+  .button-group button {
+      padding: 8px 12px;
+      background: linear-gradient(135deg, #ffa600, #ff7c00);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+  }
+
+  .button-group button:hover {
+      transform: scale(1.05);
+  }
+
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="navbar-left">
+        <img src="uploads/logo.jpg" alt="Logo"/>
+
+        <form th:action="@{/}" method="get">
+            <input type="text" class="search-box" placeholder="Search..." name="keyword"/>
+            <button type="submit" style="display:none;"></button>
+        </form>
+    </div>
+
+    <div class="navbar-right">
+        <!-- 🛒 Cart Icon -->
+        <form th:action="@{/cart}" method="get">
+            <button type="submit" class="cart-btn" title="View Cart">
+                <img src="https://cdn-icons-png.flaticon.com/512/263/263142.png" alt="Cart"/>
+            </button>
+        </form>
+
+        <!-- 👤 Profile Button -->
+        <form th:action="@{/profile}" method="get">
+            <button type="submit" class="profile-btn">
+                <img th:if="${user.photoBase64 != null}"
+                     th:src="'data:image/jpeg;base64,' + ${user.photoBase64}"
+                     alt="Profile"/>
+                <img th:unless="${user.photoBase64 != null}"
+                     src="https://via.placeholder.com/40"
+                     alt="Default Profile"/>
+            </button>
+        </form>
+
+        <!-- 🔓 Logout -->
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</div>
+
+<!-- Page content -->
+<div class="container">
+    <h2>Our Products</h2>
+    <div class="product-list">
+        <div th:each="product, stat : ${products}" th:if="${stat.index} < 6" class="product-item">
+
+            <a th:href="@{'/product/' + ${product.id}}" class="product-link">
+                <img th:src="@{'/uploads/' + ${product.imageName}}" alt="Product Image">
+                <h3 th:text="${product.name}"></h3>
+                <div class="description-box" th:text="${product.description}"></div>
+                <b>Rs. <span th:text="${product.price}"></span></b>
+            </a>
+
+            <!-- Quantity Selector -->
+            <div class="quantity-selector">
+                <button type="button" onclick="decrementQty(this)">−</button>
+                <input type="number" name="quantity" value="1" min="1" class="shared-qty"/>
+                <button type="button" onclick="incrementQty(this)">+</button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="button-group">
+                <form th:action="@{'/cart/add/' + ${product.id}}" method="post" onsubmit="syncQtyBeforeSubmit(this)">
+                    <input type="hidden" name="quantity" value="1"/>
+                    <button type="submit">Add to Cart</button>
+                </form>
+
+                <form th:action="@{'/buy-now/' + ${product.id}}"
+                      method="post"
+                      th:attr="data-product-id=${product.id}, data-price=${product.price}"
+                      onsubmit="return handleBuyNow(event)">
+                    <input type="hidden" name="quantity" value="1"/>
+                    <button type="submit">Buy Now</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function incrementQty(button) {
+        const input = button.parentElement.querySelector('input[type="number"]');
+        input.value = parseInt(input.value) + 1;
+        syncQtyToHiddenInputs(button);
+    }
+
+    function decrementQty(button) {
+        const input = button.parentElement.querySelector('input[type="number"]');
+        if (parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+            syncQtyToHiddenInputs(button);
+        }
+    }
+
+    function syncQtyBeforeSubmit(form) {
+        const productItem = form.closest('.product-item');
+        const qtyInput = productItem.querySelector('.shared-qty');
+        const hiddenInput = form.querySelector('input[name="quantity"]');
+        hiddenInput.value = qtyInput.value;
+    }
+
+    function syncQtyToHiddenInputs(button) {
+        const container = button.closest('.product-item');
+        const qty = container.querySelector('.shared-qty').value;
+        container.querySelectorAll('form input[name="quantity"]').forEach(input => {
+            input.value = qty;
+        });
+    }
+</script>
+
+</body>
+</html>

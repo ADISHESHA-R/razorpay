@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seller Dashboard</title>
+  <style>
+    /* General styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7fc;
+    }
+
+    /* Navbar styles */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #007bff;
+      color: white;
+      padding: 15px 30px;
+    }
+
+    .navbar-left .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .navbar-right .btn {
+      background-color: #dc3545;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .navbar-right .btn:hover {
+      background-color: #c82333;
+    }
+
+    /* Product upload form styles */
+    .product-form {
+      margin: 30px auto;
+      padding: 30px;
+      background-color: white;
+      max-width: 600px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-form h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .product-form label {
+      font-size: 16px;
+      color: #555;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .product-form input,
+    .product-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: #fafafa;
+    }
+
+    .product-form input[type="file"] {
+      padding: 6px;
+      font-size: 14px;
+    }
+
+    .product-form button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .product-form button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-left">
+    <h1 class="logo">Hoskote Adda Shopping</h1>
+  </div>
+  <div class="navbar-right">
+    <a href="/logout" class="btn">Logout</a>
+  </div>
+</nav>
+
+<section class="product-form">
+  <h2>Upload Product</h2>
+  <form action="/upload-product" method="POST" enctype="multipart/form-data">
+    <label for="productName">Product Name</label>
+    <input type="text" id="productName" name="productName" required>
+
+    <label for="productDescription">Description</label>
+    <textarea id="productDescription" name="productDescription" required></textarea>
+
+    <label for="productPrice">Price</label>
+    <input type="number" id="productPrice" name="productPrice" required>
+
+    <label for="productImage">Product Image</label>
+    <input type="file" id="productImage" name="productImage" required>
+
+    <button type="submit" class="btn">Upload</button>
+  </form>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hsk Shopping</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+    }
+
+    .navbar {
+      background-color: #1e1e2f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      color: white;
+      font-size: 24px;
+    }
+
+    .navbar-right .btn {
+      color: white;
+      background: linear-gradient(135deg, #ffa600, #ff7c00);
+      padding: 10px 20px;
+      margin-left: 10px;
+      text-decoration: none;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s;
+    }
+
+    .navbar-right .btn:hover {
+      transform: scale(1.05);
+      opacity: 0.95;
+    }
+
+    .products {
+      padding: 40px;
+      background-color: #ffffff;
+    }
+
+    .products h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 32px;
+      color: #333;
+    }
+
+    .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .product-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .product-item {
+      position: relative;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .product-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .product-item h3 {
+      font-size: 20px;
+      margin: 10px 0;
+      color: #222;
+    }
+
+    .description-box {
+      font-size: 15px;
+      color: #666;
+      max-height: 60px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fafafa;
+    }
+
+    .product-item b {
+      display: block;
+      font-size: 18px;
+      color: #ff6600;
+      margin-bottom: 10px;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .product-item button {
+      background: linear-gradient(135deg, #ffa600, #ff7c00);
+      color: white;
+      padding: 8px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      flex: 1;
+      transition: transform 0.2s ease;
+    }
+
+    .product-item button:hover {
+      transform: scale(1.05);
+    }
+
+    .quantity-selector {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      background: #eee;
+      padding: 5px 8px;
+      border-radius: 20px;
+    }
+
+    .quantity-selector button {
+      background: #ccc;
+      border: none;
+      padding: 4px 8px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .quantity-selector input[type="number"] {
+      width: 40px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      margin: 0 4px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-left">
+    <h1 class="logo">Hsk Shopping</h1>
+  </div>
+  <div class="navbar-right">
+    <a href="/login" class="btn">Login</a>
+    <a href="/seller-login" class="btn">Seller Login</a>
+  </div>
+</nav>
+
+<section class="products">
+  <h2>Our Products</h2>
+  <div class="product-list">
+    <div th:each="product, stat : ${products}" th:if="${stat.index} < 6" class="product-item">
+
+      <a th:href="@{'/product/' + ${product.id}}" class="product-link">
+        <img th:src="@{'/uploads/' + ${product.imageName}}" alt="Product Image">
+        <h3 th:text="${product.name}"></h3>
+        <div class="description-box" th:text="${product.description}"></div>
+        <b>Rs. <span th:text="${product.price}"></span></b>
+      </a>
+
+      <!-- Quantity Selector -->
+      <div class="quantity-selector">
+        <button type="button" onclick="decrementQty(this)">−</button>
+        <input type="number" name="quantity" value="1" min="1" class="shared-qty"/>
+        <button type="button" onclick="incrementQty(this)">+</button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <!-- Add to Cart -->
+        <form th:action="@{'/cart/add/' + ${product.id}}" method="post" onsubmit="syncQtyBeforeSubmit(this)">
+          <input type="hidden" name="quantity" value="1"/>
+          <button type="submit">Add to Cart</button>
+        </form>
+
+        <!-- Buy Now -->
+        <form th:action="@{'/buy-now/' + ${product.id}}" method="post" onsubmit="syncQtyBeforeSubmit(this)">
+          <input type="hidden" name="quantity" value="1"/>
+          <button type="submit">Buy Now</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function incrementQty(button) {
+    const input = button.parentElement.querySelector('input[type="number"]');
+    input.value = parseInt(input.value) + 1;
+  }
+
+  function decrementQty(button) {
+    const input = button.parentElement.querySelector('input[type="number"]');
+    if (parseInt(input.value) > 1) {
+      input.value = parseInt(input.value) - 1;
+    }
+  }
+
+  function syncQtyBeforeSubmit(form) {
+    const productItem = form.closest('.product-item');
+    const quantity = productItem.querySelector('.quantity-selector input[name="quantity"]').value;
+    form.querySelector('input[type="hidden"][name="quantity"]').value = quantity;
+  }
+</script>
+
+</body>
+</html>
