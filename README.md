@@ -8,3 +8,12 @@
 
 
 ![j1](https://github.com/user-attachments/assets/70b5a6b7-398d-4de2-bead-1473f13d0662)
+
+
+<img width="934" alt="jr5" src="https://github.com/user-attachments/assets/e0153242-4398-45c7-85fa-8608a40c607e" />
+
+
+<img width="946" alt="jr9" src="https://github.com/user-attachments/assets/aea25f2b-9d5c-48f3-b804-564a1deee5dc" />
+
+
+<img width="947" alt="jr8" src="https://github.com/user-attachments/assets/c9fbfce2-20e8-442d-8c27-c27b7b998b58" />
